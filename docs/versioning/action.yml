@@ -12,4 +12,4 @@ jobs:
       - name: Tag Docs Repo
         uses: dist/docs-versioning
         with:
-          last-tag: ${{ steps.fetch_last_tag.outputs.tag }}
+          last-tag: "${{ steps.fetch_last_tag.outputs.tag }}"
