@@ -11,5 +11,5 @@ jobs:
         run: echo ::set-output name=tag::$(git describe --tags `git rev-list --tags --max-count=1`)
       - name: Tag Docs Repo
         uses: dist/docs-versioning
-        env:
+        with:
           last-tag: ${{ steps.fetch_last_tag.outputs.tag }}
