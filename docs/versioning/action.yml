@@ -12,5 +12,4 @@ jobs:
       - name: Tag Docs Repo
         uses: dist/docs-versioning
         env:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
           last-tag: ${{ steps.fetch_last_tag.outputs.tag }}
