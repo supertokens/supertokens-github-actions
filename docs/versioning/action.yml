@@ -8,8 +8,5 @@ jobs:
       - uses: actions/checkout@v3
       - name: Fetch last tag
         id: fetch_last_tag
-        run: echo ::set-output name=tag::$(git describe --tags `git rev-list --tags --max-count=1`)
-      - name: Tag Docs Repo
-        uses: dist/docs-versioning
-        with:
-          last-tag: "${{ steps.fetch_last_tag.outputs.tag }}"
+        run: echo "tag$((git describe --tags `git rev-list --tags --max-count=1`))" >> $GITHUB_OUTPUT
+      - run: echo "${{ steps.fetch_last_tag.outputs.tag }}"
