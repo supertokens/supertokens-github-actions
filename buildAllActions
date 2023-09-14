@@ -1,0 +1,2 @@
+#!/bin/bash
+npx ncc build docs/versioning/index.js -o dist/docs-versioning/
