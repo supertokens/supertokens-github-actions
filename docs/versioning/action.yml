@@ -1,13 +1,5 @@
 name: "Tag Docs Repo"
 description: "Tags the docs repo and creates a release mentioning compatible versions of various SuperTokens SDKs"
-on:
-  push:
-    branches:
-      - maaster
-runs:
-  using: 'node16'
-  main: '../dist/docs-versioning/index.js'
-
 jobs:
   tag-docs:
     runs-on: ubuntu-latest
@@ -18,7 +10,7 @@ jobs:
         id: fetch_last_tag
         run: echo ::set-output name=tag::$(git describe --tags `git rev-list --tags --max-count=1`)
       - name: Tag Docs Repo
-        uses: nkshah2/supertokens-actions/dist/docs-versioning
+        uses: ./
         env:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           last-tag: ${{ steps.fetch_last_tag.outputs.tag }}
