@@ -10,7 +10,7 @@ jobs:
         id: fetch_last_tag
         run: echo ::set-output name=tag::$(git describe --tags `git rev-list --tags --max-count=1`)
       - name: Tag Docs Repo
-        uses: ./
+        uses: dist/docs-versioning
         env:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           last-tag: ${{ steps.fetch_last_tag.outputs.tag }}
