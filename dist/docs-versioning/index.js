@@ -7886,14 +7886,6 @@ module.exports = eval("require")("encoding");
 
 /***/ }),
 
-/***/ 722:
-/***/ ((module) => {
-
-module.exports = eval("require")("git-clone/promise");
-
-
-/***/ }),
-
 /***/ 491:
 /***/ ((module) => {
 
@@ -8040,18 +8032,14 @@ var github = __nccwpck_require__(438);
 var external_fs_ = __nccwpck_require__(147);
 ;// CONCATENATED MODULE: external "path"
 const external_path_namespaceObject = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("path");
-// EXTERNAL MODULE: ./node_modules/@vercel/ncc/dist/ncc/@@notfound.js?git-clone/promise
-var promise = __nccwpck_require__(722);
 ;// CONCATENATED MODULE: ./docs/versioning/index.js
 
 
 
-
-
-const pipeline = promisify(stream.pipeline);
-
 console.log("Environment variables:");
-console.log("OWNER: " + process.env.INPUT_GITHUB_OWNER);
+console.log("OWNER:", process.env.INPUT_GITHUB_OWNER);
+console.log("GITHUB WORKSPACE:", process.env.GITHUB_WORKSPACE);
+console.log("CURRENT WORKING DIRECTORY", process.cwd());
 console.log("--------------");
 console.log("");
 console.log("");
@@ -8063,12 +8051,7 @@ async function start() {
     //     repo: "docs"
     // })).data;
 
-    // download entire repo from github
-    const downloadURL = `https://github.com/${process.env.INPUT_GITHUB_OWNER}/docs.git`;
-    
-    await promise(downloadURL, "./clone");
-
-    (0,external_fs_.readdirSync)(external_path_namespaceObject.resolve(process.cwd(), "./"));
+    (0,external_fs_.readdirSync)(external_path_namespaceObject.resolve(process.cwd(), "../../../"));
 }
 
 start();

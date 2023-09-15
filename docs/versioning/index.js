@@ -1,12 +1,10 @@
 import Github from "@actions/github";
 import { readdirSync } from "fs";
 import path from "path";
-import clone from "git-clone/promise";
-
-const pipeline = promisify(stream.pipeline);
-
 console.log("Environment variables:");
-console.log("OWNER: " + process.env.INPUT_GITHUB_OWNER);
+console.log("OWNER:", process.env.INPUT_GITHUB_OWNER);
+console.log("GITHUB WORKSPACE:", process.env.GITHUB_WORKSPACE);
+console.log("CURRENT WORKING DIRECTORY", process.cwd());
 console.log("--------------");
 console.log("");
 console.log("");
@@ -18,12 +16,7 @@ async function start() {
     //     repo: "docs"
     // })).data;
 
-    // download entire repo from github
-    const downloadURL = `https://github.com/${process.env.INPUT_GITHUB_OWNER}/docs.git`;
-    
-    await clone(downloadURL, "./clone");
-
-    readdirSync(path.resolve(process.cwd(), "./"));
+    readdirSync(path.resolve(process.cwd(), "../../../"));
 }
 
 start();
