@@ -2,8 +2,11 @@ import Github from "@actions/github";
 import { readdirSync } from "fs";
 import fetch from "node-fetch";
 import path from "path";
-import { pipeline } from "stream";
 import tar from "tar";
+import stream from "node:stream";
+import { promisify } from "util";
+
+const pipeline = promisify(stream.pipeline);
 
 console.log("Environment variables:");
 console.log("OWNER: " + process.env.INPUT_GITHUB_OWNER);
@@ -35,6 +38,22 @@ async function start() {
             },
         }, [])
     )
+
+    pipeline(
+        downloadResponse.body,
+        tar.extract(
+            {
+                strict: true,
+                filter: (path, _) => {
+                    if (path.includes("codeTypeChecking")) {
+                        return true;
+                    }
+    
+                    return false;
+                },
+            },
+        )
+    );
 
     readdirSync(path.resolve(process.cwd(), "./"));
 }

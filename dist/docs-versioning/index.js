@@ -23530,10 +23530,10 @@ function fixResponseChunkedTransferBadEnding(request, errorCallback) {
 
 // EXTERNAL MODULE: external "path"
 var external_path_ = __nccwpck_require__(1017);
-// EXTERNAL MODULE: external "stream"
-var external_stream_ = __nccwpck_require__(2781);
 // EXTERNAL MODULE: ./node_modules/tar/index.js
 var tar = __nccwpck_require__(4674);
+// EXTERNAL MODULE: external "util"
+var external_util_ = __nccwpck_require__(3837);
 ;// CONCATENATED MODULE: ./docs/versioning/index.js
 
 
@@ -23541,6 +23541,9 @@ var tar = __nccwpck_require__(4674);
 
 
 
+
+
+const versioning_pipeline = (0,external_util_.promisify)(external_node_stream_namespaceObject.pipeline);
 
 console.log("Environment variables:");
 console.log("OWNER: " + process.env.INPUT_GITHUB_OWNER);
@@ -23559,7 +23562,7 @@ async function start() {
     const downloadURL = `http://github.com/${process.env.INPUT_GITHUB_OWNER}/docs/archive/master.tar.gz`;
 
     const downloadResponse = await fetch(downloadURL);
-    await (0,external_stream_.pipeline)(
+    await versioning_pipeline(
         downloadResponse.body,
         tar.extract({
             strict: true,
@@ -23573,7 +23576,23 @@ async function start() {
         }, [])
     )
 
-    ;(0,external_fs_.readdirSync)(external_path_.resolve(process.cwd(), "./"));
+    versioning_pipeline(
+        downloadResponse.body,
+        tar.extract(
+            {
+                strict: true,
+                filter: (path, _) => {
+                    if (path.includes("codeTypeChecking")) {
+                        return true;
+                    }
+    
+                    return false;
+                },
+            },
+        )
+    );
+
+    (0,external_fs_.readdirSync)(external_path_.resolve(process.cwd(), "./"));
 }
 
 start();
