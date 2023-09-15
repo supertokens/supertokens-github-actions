@@ -299,6 +299,10 @@ async function start() {
         pythonVersion,
     };
 
+    console.log("Current Versions:");
+    console.log(JSON.parse(JSON.stringify(versions), null, 2));
+    console.log("------------------");
+
     const releaseNotes = getReleaseNotesWithVersions(versions);
 
     const octokit = Github.getOctokit(process.env.INPUT_GITHUB_TOKEN);
@@ -315,10 +319,12 @@ async function start() {
 
         await createNewRelease(octokit, "1.0.0", releaseNotes);
     } else {
+        console.log("Found an older release");
         const latestRelease = releases[0];
         const latestTagName = latestRelease.tag_name;
         const latestReleaseId = latestRelease.id;
         const latestReleaseNotes = latestRelease.body;
+        console.log("Release notes for older release", latestReleaseNotes);
         const lines = latestReleaseNotes.split("\n").filter((line) => {
             if (line === "\n") {
                 return false;
