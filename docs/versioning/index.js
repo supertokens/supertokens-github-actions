@@ -269,151 +269,143 @@ function getNewTagNameForRelease(oldTag) {
 }
 
 async function start() {
-    try {
-        const flutterVersion = getFlutterVersion();
-        const goVersion = getGolangVersion();
-        const iosVersion = getIosVersion();
-        const jsVersions = getJsEnvDependencies();
-        const androidVersion = getAndroidVersion();
-        const pythonVersion = getPythonVersion();
+    const flutterVersion = getFlutterVersion();
+    const goVersion = getGolangVersion();
+    const iosVersion = getIosVersion();
+    const jsVersions = getJsEnvDependencies();
+    const androidVersion = getAndroidVersion();
+    const pythonVersion = getPythonVersion();
 
-        const versions = {
-            flutterVersion,
-            goVersion,
-            iosVersion,
-            ...jsVersions,
-            androidVersion,
-            pythonVersion,
-        };
+    const versions = {
+        flutterVersion,
+        goVersion,
+        iosVersion,
+        ...jsVersions,
+        androidVersion,
+        pythonVersion,
+    };
 
-        const releaseNotes = getReleaseNotesWithVersions(versions);
+    const releaseNotes = getReleaseNotesWithVersions(versions);
 
-        const octokit = Github.getOctokit(process.env.INPUT_GITHUB_TOKEN);
+    const octokit = Github.getOctokit(process.env.INPUT_GITHUB_TOKEN);
 
-        const releases = (await octokit.rest.repos.listReleases({
-            owner: process.env.INPUT_GITHUB_OWNER,
-            repo: "docs"
-        })).data;
+    const releases = (await octokit.rest.repos.listReleases({
+        owner: process.env.INPUT_GITHUB_OWNER,
+        repo: "docs"
+    })).data;
 
-        if (releases.length === 0) {
-            console.log("**************************************************");
-            console.log("* No previous releases found, creating a new one *");
-            console.log("**************************************************");
+    if (releases.length === 0) {
+        console.log("**************************************************");
+        console.log("* No previous releases found, creating a new one *");
+        console.log("**************************************************");
 
-            await createNewRelease(octokit, "1.0.0", releaseNotes);
+        await createNewRelease(octokit, "1.0.0", releaseNotes);
+    } else {
+        const latestRelease = releases[0];
+        const latestTagName = latestRelease.tag_name;
+        const latestReleaseId = latestRelease.id;
+        const latestReleaseNotes = latestRelease.body;
+        const lines = latestReleaseNotes.split("\n").filter((line) => {
+            if (line === "\n") {
+                return false;
+            }
+
+            if (line === "") {
+                return false;
+            }
+
+            if (line.includes(releaseNotesFirstLine)) {
+                return false;
+            }
+
+            return true;
+        }).map((line) => line.trim());
+
+        let sdkToVersionFromOldReleaseNotes = {};
+
+        for (let i = 0; i < lines.length; i++) {
+            const line = lines[i];
+            const parts = line.split(":");
+
+            if (parts.length === 2) {
+                const sdk = parts[0].trim();
+                const version = parts[1].trim();
+
+                sdkToVersionFromOldReleaseNotes[sdk] = version;
+            }
+        }
+
+        const expectedSdks = [
+            "supertokens-node",
+            "supertokens-golang",
+            "supertokens-python",
+            "supertokens-auth-react",
+            "supertokens-web-js",
+            "supertokens-react-native",
+            "supertokens-flutter",
+            "supertokens-ios",
+            "supertokens-android",
+        ];
+
+        const nodeVersionOld = sdkToVersionFromOldReleaseNotes["supertokens-node"];
+        const goVersionOld = sdkToVersionFromOldReleaseNotes["supertokens-golang"];
+        const pythonVersionOld = sdkToVersionFromOldReleaseNotes["supertokens-python"];
+        const authReactVersionOld = sdkToVersionFromOldReleaseNotes["supertokens-auth-react"];
+        const webJsVersionOld = sdkToVersionFromOldReleaseNotes["supertokens-web-js"];
+        const reactNativeVersionOld = sdkToVersionFromOldReleaseNotes["supertokens-react-native"];
+        const flutterVersionOld = sdkToVersionFromOldReleaseNotes["supertokens-flutter"];
+        const iosVersionOld = sdkToVersionFromOldReleaseNotes["supertokens-ios"];
+        const androidVersionOld = sdkToVersionFromOldReleaseNotes["supertokens-android"];
+
+        const doesNodeMatch = nodeVersionOld === versions.nodeVersion;
+        const doesGoMatch = goVersionOld === versions.goVersion;
+        const doesPythonMatch = pythonVersionOld === versions.pythonVersion;
+        const doesAuthReactMatch = authReactVersionOld === versions.authReactVersion;
+        const doesWebJsMatch = webJsVersionOld === versions.webJsVersion;
+        const doesReactNativeMatch = reactNativeVersionOld === versions.reactNativeVersion;
+        const doesFlutterMatch = flutterVersionOld === versions.flutterVersion;
+        const doesIosMatch = iosVersionOld === versions.iosVersion;
+        const doesAndroidMatch = androidVersionOld === versions.androidVersion;
+
+        const areSdksSame = doesNodeMatch && doesGoMatch && doesPythonMatch && doesAuthReactMatch && doesWebJsMatch && doesReactNativeMatch && doesFlutterMatch && doesIosMatch && doesAndroidMatch;
+
+        const isSdkListSame = expectedSdks.every((sdk) => sdkToVersionFromOldReleaseNotes[sdk] !== undefined) && expectedSdks.length === Object.keys(sdkToVersionFromOldReleaseNotes).length;
+
+        console.log("isSdkListSame", isSdkListSame)
+        console.log("areSdksSame", areSdksSame)
+
+        if (!isSdkListSame) {
+            throw new Error("List of SDKs in the release notes has changed, this action needs to be updated to consider the new SDK");
         } else {
-            const latestRelease = releases[0];
-            const latestTagName = latestRelease.tag_name;
-            const latestReleaseId = latestRelease.id;
-            const latestReleaseNotes = latestRelease.body;
-            const lines = latestReleaseNotes.split("\n").filter((line) => {
-                if (line === "\n") {
-                    return false;
-                }
+            if (areSdksSame) {
+                console.log("***************************************************");
+                console.log("* SDKs have not changed, updating the old release *");
+                console.log("***************************************************");
 
-                if (line === "") {
-                    return false;
-                }
+                await octokit.rest.repos.deleteRelease({
+                    owner: process.env.INPUT_GITHUB_OWNER,
+                    repo: "docs",
+                    release_id: latestReleaseId,
+                });
 
-                if (line.includes(releaseNotesFirstLine)) {
-                    return false;
-                }
+                await octokit.request(`DELETE /repos/${process.env.INPUT_GITHUB_OWNER}/docs/git/refs/tags/${latestTagName}`, {
+                    owner: process.env.INPUT_GITHUB_OWNER,
+                    repo: 'docs',
+                    ref: `tags/${latestTagName}`,
+                })
 
-                return true;
-            }).map((line) => line.trim());
+                // Adding a delay for tag deletion to take effect
+                await new Promise((r) => setTimeout(r, 2000));
 
-            let sdkToVersionFromOldReleaseNotes = {};
-
-            for (let i = 0; i < lines.length; i++) {
-                const line = lines[i];
-                const parts = line.split(":");
-
-                if (parts.length === 2) {
-                    const sdk = parts[0].trim();
-                    const version = parts[1].trim();
-
-                    sdkToVersionFromOldReleaseNotes[sdk] = version;
-                }
-            }
-
-            const expectedSdks = [
-                "supertokens-node",
-                "supertokens-golang",
-                "supertokens-python",
-                "supertokens-auth-react",
-                "supertokens-web-js",
-                "supertokens-react-native",
-                "supertokens-flutter",
-                "supertokens-ios",
-                "supertokens-android",
-            ];
-
-            const nodeVersionOld = sdkToVersionFromOldReleaseNotes["supertokens-node"];
-            const goVersionOld = sdkToVersionFromOldReleaseNotes["supertokens-golang"];
-            const pythonVersionOld = sdkToVersionFromOldReleaseNotes["supertokens-python"];
-            const authReactVersionOld = sdkToVersionFromOldReleaseNotes["supertokens-auth-react"];
-            const webJsVersionOld = sdkToVersionFromOldReleaseNotes["supertokens-web-js"];
-            const reactNativeVersionOld = sdkToVersionFromOldReleaseNotes["supertokens-react-native"];
-            const flutterVersionOld = sdkToVersionFromOldReleaseNotes["supertokens-flutter"];
-            const iosVersionOld = sdkToVersionFromOldReleaseNotes["supertokens-ios"];
-            const androidVersionOld = sdkToVersionFromOldReleaseNotes["supertokens-android"];
-
-            const doesNodeMatch = nodeVersionOld === versions.nodeVersion;
-            const doesGoMatch = goVersionOld === versions.goVersion;
-            const doesPythonMatch = pythonVersionOld === versions.pythonVersion;
-            const doesAuthReactMatch = authReactVersionOld === versions.authReactVersion;
-            const doesWebJsMatch = webJsVersionOld === versions.webJsVersion;
-            const doesReactNativeMatch = reactNativeVersionOld === versions.reactNativeVersion;
-            const doesFlutterMatch = flutterVersionOld === versions.flutterVersion;
-            const doesIosMatch = iosVersionOld === versions.iosVersion;
-            const doesAndroidMatch = androidVersionOld === versions.androidVersion;
-
-            const areSdksSame = doesNodeMatch && doesGoMatch && doesPythonMatch && doesAuthReactMatch && doesWebJsMatch && doesReactNativeMatch && doesFlutterMatch && doesIosMatch && doesAndroidMatch;
-
-            const isSdkListSame = expectedSdks.every((sdk) => sdkToVersionFromOldReleaseNotes[sdk] !== undefined) && expectedSdks.length === Object.keys(sdkToVersionFromOldReleaseNotes).length;
-
-            console.log("isSdkListSame", isSdkListSame)
-            console.log("areSdksSame", areSdksSame)
-
-            if (!isSdkListSame) {
-                throw new Error("List of SDKs in the release notes has changed, this action needs to be updated to consider the new SDK");
+                await createNewRelease(octokit, latestTagName, releaseNotes);
             } else {
-                if (areSdksSame) {
-                    console.log("***************************************************");
-                    console.log("* SDKs have not changed, updating the old release *");
-                    console.log("***************************************************");
+                console.log("*********************************************");
+                console.log("* SDKs have changed, creating a new release *");
+                console.log("*********************************************");
 
-                    await octokit.rest.repos.deleteRelease({
-                        owner: process.env.INPUT_GITHUB_OWNER,
-                        repo: "docs",
-                        release_id: latestReleaseId,
-                    });
-
-                    await octokit.request(`DELETE /repos/${process.env.INPUT_GITHUB_OWNER}/docs/git/refs/tags/${latestTagName}`, {
-                        owner: process.env.INPUT_GITHUB_OWNER,
-                        repo: 'docs',
-                        ref: `tags/${latestTagName}`,
-                    })
-
-                    // Adding a delay for tag deletion to take effect
-                    await new Promise((r) => setTimeout(r, 2000));
-
-                    await createNewRelease(octokit, latestTagName, releaseNotes);
-                } else {
-                    console.log("*********************************************");
-                    console.log("* SDKs have changed, creating a new release *");
-                    console.log("*********************************************");
-
-                    await createNewRelease(octokit, getNewTagNameForRelease(latestTagName), releaseNotes);
-                }
+                await createNewRelease(octokit, getNewTagNameForRelease(latestTagName), releaseNotes);
             }
         }
-    } catch (e) {
-        if (e.status === "UNRELEASED_SDK") {
-            console.log("Skipping tagging because of unreleased SDKs")
-        }
-
-        throw e;
     }
 }
 
