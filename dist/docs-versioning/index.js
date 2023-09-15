@@ -8095,7 +8095,7 @@ function getGolangVersion() {
 
     const supertokensVersionLine = lines.find((line) => line.includes("supertokens/supertokens-golang"));
 
-    print("SuperTokens go version line:", supertokensVersionLine);
+    console.log("SuperTokens go version line:", supertokensVersionLine);
 }
 
 function getPythonVersion() {
@@ -8106,7 +8106,7 @@ function getPythonVersion() {
 
     const supertokensVersionLine = lines.find((line) => line.includes("supertokens-python"));
 
-    print("SuperTokens python version line:", supertokensVersionLine);
+    console.log("SuperTokens python version line:", supertokensVersionLine);
 }
 
 function getFlutterVersion() {
@@ -8117,7 +8117,7 @@ function getFlutterVersion() {
 
     const supertokensVersionLine = lines.find((line) => line.includes("supertokens_flutter"));
 
-    print("SuperTokens flutter version line:", supertokensVersionLine);
+    console.log("SuperTokens flutter version line:", supertokensVersionLine);
 }
 
 function getIosVersion() {
@@ -8128,7 +8128,7 @@ function getIosVersion() {
 
     const supertokensVersionLine = lines.find((line) => line.includes("SuperTokensIOS"));
 
-    print("SuperTokens ios version line:", supertokensVersionLine);
+    console.log("SuperTokens ios version line:", supertokensVersionLine);
 }
 
 function getAndroidVersion() {
@@ -8139,7 +8139,7 @@ function getAndroidVersion() {
 
     const supertokensVersionLine = lines.find((line) => line.includes("com.github.supertokens:supertokens-android"));
 
-    print("SuperTokens android version line:", supertokensVersionLine);
+    console.log("SuperTokens android version line:", supertokensVersionLine);
 }
 
 async function start() {
