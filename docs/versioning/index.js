@@ -86,7 +86,7 @@ function getFlutterVersion() {
 }
 
 function getIosVersion() {
-    const packagePath = path.resolve(process.cwd(), "./v2/src/plugins/codeTypeChecking/iosEnv/Podfile");
+    const packagePath = path.resolve(process.cwd(), "./v2/src/plugins/codeTypeChecking/iosenv/Podfile");
 
     const fileContents = readFileSync(packagePath, "utf-8");
     const lines = fileContents.split("\n");
