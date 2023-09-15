@@ -16,6 +16,8 @@ class UnreleasedSDKError extends Error {
     }
 }
 
+const releaseNotesFirstLine = "This version is compatible with the following supertokens SDKs:";
+
 function getJsEnvDependencies() {
     const jsPackageJsonPath = path.resolve(process.cwd(), "./v2/src/plugins/codeTypeChecking/jsEnv/package.json");
     const jsEnvPackageJson = JSON.parse(readFileSync(jsPackageJsonPath, "utf-8"));
@@ -204,7 +206,7 @@ function getAndroidVersion() {
 
 function getReleaseNotesWithVersions(versions) {
     return `
-    This version is compatible with the following supertokens SDKs:
+    ${releaseNotesFirstLine}
 
     supertokens-node: ${versions.jsVersions.nodeVersion}
     supertokens-golang: ${versions.goVersion}
@@ -239,10 +241,17 @@ function getVersionForReleaseNotes(version) {
 }
 
 async function start() {
-    // const tags = (await octokit.rest.repos.listTags({
-    //     owner: process.env.INPUT_GITHUB_OWNER,
-    //     repo: "docs"
-    // })).data;
+    const expectedSdks = [
+        "supertokens-node",
+        "supertokens-golang",
+        "supertokens-python",
+        "supertokens-auth-react",
+        "supertokens-web-js",
+        "supertokens-react-native",
+        "supertokens-flutter",
+        "supertokens-ios",
+        "supertokens-android",
+    ];
 
     try {
         const flutterVersion = getFlutterVersion();
@@ -283,8 +292,25 @@ async function start() {
                 body: releaseNotes,
             });
         } else {
-            console.log("Previous release found")
             console.log(releases[0])
+            const latestReleaseNotes = releases[0].body;
+            const lines = latestReleaseNotes.split("\n").filter((line) => {
+                if (line === "\n") {
+                    return false;
+                }
+
+                if (line === "") {
+                    return false;
+                }
+
+                if (line.includes(releaseNotesFirstLine)) {
+                    return false;
+                }
+
+                return true;
+            });
+
+            console.log(lines)
         }
     } catch (e) {
         if (e.status === "UNRELEASED_SDK") {
