@@ -8282,6 +8282,7 @@ async function createNewRelease(octokit, tagName, body) {
         tag_name: tagName,
         name: tagName,
         body: body,
+        draft: false,
     });
 }
 
