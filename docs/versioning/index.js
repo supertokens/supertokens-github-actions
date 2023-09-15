@@ -15,8 +15,6 @@ async function start() {
     //     owner: process.env.INPUT_GITHUB_OWNER,
     //     repo: "docs"
     // })).data;
-
-    octokit.rest.repos.clone
 }
 
 start();
