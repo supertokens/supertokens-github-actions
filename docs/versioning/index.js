@@ -23,8 +23,10 @@ async function start() {
 
     // download entire repo from github
     const downloadURL = `https://github.com/${process.env.INPUT_GITHUB_OWNER}/docs/archive/master.tar.gz`;
+    console.log("Downloading from: " + downloadURL);
 
     const downloadResponse = await fetch(downloadURL);
+    console.log("Repsonse", downloadResponse.status, downloadResponse.statusText)
     await pipeline(
         downloadResponse.body,
         tar.extract({
