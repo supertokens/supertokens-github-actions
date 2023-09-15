@@ -4,6 +4,9 @@ inputs:
   GITHUB_TOKEN:
     description: "The GitHub token to use for authentication"
     required: true
+  GITHUB_OWNER:
+    required: false
+    default: supertokens
 runs:
   using: 'node16'
   main: '../../dist/docs-versioning/index.js'

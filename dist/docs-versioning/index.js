@@ -7984,11 +7984,14 @@ __nccwpck_require__.a(__webpack_module__, async (__webpack_handle_async_dependen
 /* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(438);
 
 
+console.log(process.env.INPUT_GITHUB_OWNER)
 const octokit = _actions_github__WEBPACK_IMPORTED_MODULE_0__.getOctokit(process.env.INPUT_GITHUB_TOKEN);
-console.log(await octokit.rest.repos.listTags({
+const tags = await octokit.rest.repos.listTags({
     owner: "nkshah2",
     repo: "docs"
-}));
+});
+console.log("TAGSSSS");
+console.log(tags);
 __webpack_async_result__();
 } catch(e) { __webpack_async_result__(e); } }, 1);
 
