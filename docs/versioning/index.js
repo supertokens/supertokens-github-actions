@@ -17,3 +17,5 @@ async function start() {
     console.log(process.cwd());
     console.log(fs.readdirSync(process.cwd()));
 }
+
+start();

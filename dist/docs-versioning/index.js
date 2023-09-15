@@ -8037,14 +8037,16 @@ console.log("");
 console.log("");
 
 async function start() {
-    const octokit = Github.getOctokit(process.env.INPUT_GITHUB_TOKEN);
+    const octokit = _actions_github__WEBPACK_IMPORTED_MODULE_0__.getOctokit(process.env.INPUT_GITHUB_TOKEN);
     const tags = (await octokit.rest.repos.listTags({
         owner: process.env.INPUT_GITHUB_OWNER,
         repo: "docs"
     })).data;
 
     console.log(process.cwd());
-    console.log(fs.readdirSync(process.cwd()));
+    console.log(fs__WEBPACK_IMPORTED_MODULE_1__.readdirSync(process.cwd()));
 }
+
+start();
 })();
 
