@@ -8343,7 +8343,7 @@ async function start() {
                 }
 
                 return true;
-            });
+            }).map((line) => line.trim());
 
             console.log(lines)
         }
