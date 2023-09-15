@@ -8037,6 +8037,7 @@ const external_path_namespaceObject = __WEBPACK_EXTERNAL_createRequire(import.me
 
 
 
+console.log(process.env)
 console.log("Environment variables:");
 console.log("OWNER: " + process.env.INPUT_GITHUB_OWNER);
 console.log("--------------");
@@ -8050,11 +8051,7 @@ async function start() {
     //     repo: "docs"
     // })).data;
 
-    console.log(external_path_namespaceObject.resolve(process.cwd(), "./"));
-    console.log(external_fs_.readdirSync(external_path_namespaceObject.resolve(process.cwd(), "./"), {
-        withFileTypes: true,
-        recursive: true,
-    }));
+    octokit.rest.repos.clone
 }
 
 start();
