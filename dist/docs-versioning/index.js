@@ -23567,7 +23567,6 @@ async function start() {
     await versioning_pipeline(
         downloadResponse.body,
         tar.extract({
-            strict: true,
             filter: (path) => {
                 if (path.includes("codeTypeChecking")) {
                     return true;
