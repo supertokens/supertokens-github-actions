@@ -8051,7 +8051,9 @@ async function start() {
     //     repo: "docs"
     // })).data;
 
-    console.log((0,external_fs_.readdirSync)(external_path_namespaceObject.resolve(process.cwd(), "./")))
+    const jsPackageJsonPath = external_path_namespaceObject.resolve(process.cwd(), "./v2/src/plugins/codeTypeChecking/jsEnv/package.json");
+    const jsEnvPackageJson = JSON.parse((0,external_fs_.readFileSync)(jsPackageJsonPath, "utf-8"));
+    console.log(jsEnvPackageJson)
 }
 
 start();

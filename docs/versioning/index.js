@@ -1,5 +1,5 @@
 import Github from "@actions/github";
-import { readdirSync } from "fs";
+import { readFileSync, readdirSync } from "fs";
 import path from "path";
 console.log("Environment variables:");
 console.log("OWNER:", process.env.INPUT_GITHUB_OWNER);
@@ -16,7 +16,9 @@ async function start() {
     //     repo: "docs"
     // })).data;
 
-    console.log(readdirSync(path.resolve(process.cwd(), "./")))
+    const jsPackageJsonPath = path.resolve(process.cwd(), "./v2/src/plugins/codeTypeChecking/jsEnv/package.json");
+    const jsEnvPackageJson = JSON.parse(readFileSync(jsPackageJsonPath, "utf-8"));
+    console.log(jsEnvPackageJson)
 }
 
 start();
