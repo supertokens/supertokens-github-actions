@@ -16,7 +16,7 @@ async function start() {
     // })).data;
 
     console.log(path.resolve(process.cwd(), "../../"));
-    console.log(fs.readdirSync(path.resolve(process.cwd(), "../../../"), {
+    console.log(fs.readdirSync(path.resolve(process.cwd(), "../../"), {
         withFileTypes: true,
         recursive: true,
     }));
