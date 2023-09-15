@@ -8406,14 +8406,14 @@ async function start() {
             const doesIosMatch = iosVersionOld === versions.iosVersion;
             const doesAndroidMatch = androidVersionOld === versions.androidVersion;
 
-            const haveSdksChanged = doesNodeMatch && doesGoMatch && doesPythonMatch && doesAuthReactMatch && doesWebJsMatch && doesReactNativeMatch && doesFlutterMatch && doesIosMatch && doesAndroidMatch;
+            const areSdksSame = doesNodeMatch && doesGoMatch && doesPythonMatch && doesAuthReactMatch && doesWebJsMatch && doesReactNativeMatch && doesFlutterMatch && doesIosMatch && doesAndroidMatch;
 
             const isSdkListSame = expectedSdks.every((sdk) => sdkToVersionFromOldReleaseNotes[sdk] !== undefined) && expectedSdks.length === Object.keys(sdkToVersionFromOldReleaseNotes).length;
 
             if (!isSdkListSame) {
                 throw new Error("List of SDKs in the release notes has changed, this action needs to be updated to consider the new SDK");
             } else {
-                if (!haveSdksChanged) {
+                if (!areSdksSame) {
                     console.log("***************************************************");
                     console.log("* SDKs have not changed, updating the old release *");
                     console.log("***************************************************");
