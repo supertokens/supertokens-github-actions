@@ -8336,7 +8336,6 @@ async function start() {
     console.log("Current Versions:");
     console.log(JSON.parse(JSON.stringify(versions), null, 2));
     console.log("------------------");
-    throw new Error("Test error");
 
     const releaseNotes = getReleaseNotesWithVersions(versions);
 
