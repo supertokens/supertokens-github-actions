@@ -8060,9 +8060,7 @@ function getJsEnvDependencies() {
     const nodeVersion = jsDependencies["supertokens-node"];
     const reactNativeVersion = jsDependencies["supertokens-react-native"];
     const webJsVersion = jsDependencies["supertokens-web-js"];
-    const webjsScriptVersion = jsDependencies["supertokens-web-js-script"];
     const websiteVersion = jsDependencies["supertokens-website"];
-    const websiteScriptVersion = jsDependencies["supertokens-website-script"];
 
     if (authReactVersion.includes("git")) {
         throw new UnreleasedSDKError("supertokens-auth-react is not using a released version of the SDK.");
@@ -8076,11 +8074,11 @@ function getJsEnvDependencies() {
         throw new UnreleasedSDKError("supertokens-node is not using a released version of the SDK.");
     }
 
-    if (webJsVersion.includes("github") || webjsScriptVersion.includes("github")) {
+    if (webJsVersion.includes("github")) {
         throw new UnreleasedSDKError("supertokens-web-js OR web-js-script is not using a released version of the SDK.");
     }
 
-    if (websiteVersion.includes("git") || websiteScriptVersion.includes("git")) {
+    if (websiteVersion.includes("git")) {
         throw new UnreleasedSDKError("supertokens-website OR website-script is not using a released version of the SDK.");
     }
 
