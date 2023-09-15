@@ -11,8 +11,6 @@ console.log("--------------");
 console.log("");
 console.log("");
 
-const httpClient = new HttpClient.HttpClient();
-
 async function start() {
     const octokit = Github.getOctokit(process.env.INPUT_GITHUB_TOKEN);
     // const tags = (await octokit.rest.repos.listTags({
