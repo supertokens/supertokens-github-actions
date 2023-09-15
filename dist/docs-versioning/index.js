@@ -8038,8 +8038,6 @@ const external_path_namespaceObject = __WEBPACK_EXTERNAL_createRequire(import.me
 
 console.log("Environment variables:");
 console.log("OWNER:", process.env.INPUT_GITHUB_OWNER);
-console.log("GITHUB WORKSPACE:", process.env.GITHUB_WORKSPACE);
-console.log("CURRENT WORKING DIRECTORY", process.cwd());
 console.log("--------------");
 console.log("");
 console.log("");
@@ -8054,8 +8052,8 @@ class UnreleasedSDKError extends Error {
 }
 
 function getJsEnvDependencies() {
-    const jsPackageJsonPath = path.resolve(process.cwd(), "./v2/src/plugins/codeTypeChecking/jsEnv/package.json");
-    const jsEnvPackageJson = JSON.parse(readFileSync(jsPackageJsonPath, "utf-8"));
+    const jsPackageJsonPath = external_path_namespaceObject.resolve(process.cwd(), "./v2/src/plugins/codeTypeChecking/jsEnv/package.json");
+    const jsEnvPackageJson = JSON.parse((0,external_fs_.readFileSync)(jsPackageJsonPath, "utf-8"));
     
     const jsDependencies = jsEnvPackageJson.dependencies;
     const authReactVersion = jsDependencies["supertokens-auth-react"];
@@ -8122,7 +8120,7 @@ function getGolangVersion() {
         throw new UnreleasedSDKError("supertokens-golang is not using a released version of the SDK.");
     }
 
-    console.log("SuperTokens go version:", version);
+    return version;
 }
 
 function getPythonVersion() {
@@ -8131,13 +8129,27 @@ function getPythonVersion() {
     const fileContents = (0,external_fs_.readFileSync)(packagePath, "utf-8");
     const lines = fileContents.split("\n");
 
-    const supertokensVersionLine = lines.find((line) => line.includes("supertokens-python"));
+    let supertokensVersionLine = lines.find((line) => line.includes("supertokens-python"));
 
     if (supertokensVersionLine === undefined) {
         throw new Error("Error reading version for python");
     }
 
-    console.log("SuperTokens python version line:", supertokensVersionLine);
+    supertokensVersionLine = supertokensVersionLine.trim();
+
+    if (supertokensVersionLine.includes("git")) {
+        throw new UnreleasedSDKError("supertokens-python is not using a released version of the SDK.");
+    }
+
+    const parts = supertokensVersionLine.split("==");
+
+    if (parts.length !== 2) {
+        throw new Error("Invalid version for supertokens-python");
+    }
+
+    const version = parts[1].trim();
+
+    return version;
 }
 
 function getFlutterVersion() {
@@ -8166,13 +8178,13 @@ function getFlutterVersion() {
         throw new UnreleasedSDKError("supertokens_flutter is not using a released version of the SDK.");
     }
 
-    console.log("SuperTokens flutter version:", version);
+    return version;
 }
 
 function getIosVersion() {
-    const packagePath = path.resolve(process.cwd(), "./v2/src/plugins/codeTypeChecking/iosenv/Podfile");
+    const packagePath = external_path_namespaceObject.resolve(process.cwd(), "./v2/src/plugins/codeTypeChecking/iosenv/Podfile");
 
-    const fileContents = readFileSync(packagePath, "utf-8");
+    const fileContents = (0,external_fs_.readFileSync)(packagePath, "utf-8");
     const lines = fileContents.split("\n");
 
     let supertokensVersionLine = lines.find((line) => line.includes("SuperTokensIOS"));
@@ -8188,6 +8200,7 @@ function getIosVersion() {
     }
 
     console.log("SuperTokens ios version line:", supertokensVersionLine);
+    throw new Error("Implement");
 }
 
 function getAndroidVersion() {
@@ -8217,7 +8230,7 @@ function getAndroidVersion() {
         throw new UnreleasedSDKError("supertokens-android is not using a released version of the SDK.");
     }
 
-    console.log("SuperTokens android version line:", version);
+    return version;
 }
 
 async function start() {
@@ -8227,12 +8240,21 @@ async function start() {
     //     repo: "docs"
     // })).data;
 
-    getFlutterVersion();
-    getGolangVersion();
-    // getIosVersion();
-    // const jsEnv = getJsEnvDependencies();
-    getAndroidVersion();
-    getPythonVersion();
+    const flutterVersion = getFlutterVersion();
+    const goVersion = getGolangVersion();
+    const iosVersion = getIosVersion();
+    const jsEnv = getJsEnvDependencies();
+    const androidVersion = getAndroidVersion();
+    const pythonVersion = getPythonVersion();
+
+    console.log(JSON.parse(JSON.stringify({
+        flutterVersion,
+        goVersion,
+        iosVersion,
+        jsEnv,
+        androidVersion,
+        pythonVersion,
+    })))
 }
 
 start();
