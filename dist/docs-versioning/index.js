@@ -8051,7 +8051,7 @@ async function start() {
     })).data;
 
     console.log(process.cwd());
-    console.log(external_fs_.readdirSync(external_path_namespaceObject.resolve(process.cwd())));
+    console.log(external_fs_.readdirSync(external_path_namespaceObject.resolve(process.cwd(), "../../../")));
 }
 
 start();
