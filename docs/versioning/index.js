@@ -303,7 +303,6 @@ async function start() {
         } else {
             const latestRelease = releases[0];
             const latestTagName = latestRelease.tag_name;
-            const latestReleaseName = latestRelease.name;
             const latestReleaseId = latestRelease.id;
             const latestReleaseNotes = latestRelease.body;
             const lines = latestReleaseNotes.split("\n").filter((line) => {
@@ -389,21 +388,19 @@ async function start() {
                         release_id: latestReleaseId,
                     });
 
-                    // const tags = await octokit.rest.repos.listTags({
-                    //     owner: process.env.INPUT_GITHUB_OWNER,
-                    //     repo: "docs",
-                    // }).data;
-
-
                     await octokit.request(`DELETE /repos/${process.env.INPUT_GITHUB_OWNER}/docs/git/refs/tags/${latestTagName}`, {
                         owner: process.env.INPUT_GITHUB_OWNER,
                         repo: 'docs',
                         ref: `tags/${latestTagName}`,
                     })
+
+                    await createNewRelease(octokit, latestTagName, releaseNotes);
                 } else {
                     console.log("*********************************************");
                     console.log("* SDKs have changed, creating a new release *");
                     console.log("*********************************************");
+
+                    await createNewRelease(octokit, getNewTagNameForRelease(latestTagName), releaseNotes);
                 }
             }
         }
