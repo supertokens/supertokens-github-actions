@@ -351,7 +351,9 @@ async function start() {
                 const sdk = parts[0].trim();
                 const version = parts[1].trim();
 
-                sdkToVersionFromOldReleaseNotes[sdk] = version;
+                const key = sdk.replace("- ", "").trim()
+
+                sdkToVersionFromOldReleaseNotes[key] = version;
             }
         }
 
@@ -368,7 +370,7 @@ async function start() {
         ];
 
         console.log(expectedSdks)
-        console.log(sdkToVersionFromOldReleaseNotes)
+        console.log(Object.keys(sdkToVersionFromOldReleaseNotes))
 
         const nodeVersionOld = sdkToVersionFromOldReleaseNotes["supertokens-node"];
         const goVersionOld = sdkToVersionFromOldReleaseNotes["supertokens-golang"];
