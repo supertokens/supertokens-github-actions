@@ -58,9 +58,27 @@ function getGolangVersion() {
     const fileContents = readFileSync(packagePath, "utf-8");
     const lines = fileContents.split("\n");
 
-    const supertokensVersionLine = lines.find((line) => line.includes("supertokens/supertokens-golang"));
+    let supertokensVersionLine = lines.find((line) => line.includes("supertokens/supertokens-golang"));
 
-    console.log("SuperTokens go version line:", supertokensVersionLine);
+    if (supertokensVersionLine === undefined) {
+        throw new Error("Error reading version for golang");
+    }
+
+    supertokensVersionLine = supertokensVersionLine.trim();
+
+    const parts = supertokensVersionLine.split(" ");
+
+    if (parts.length !== 2) {
+        throw new Error("Invalid version for supertokens-golang");
+    }
+
+    const version = parts[1].trim();
+
+    if (version.includes("git")) {
+        throw new Error("supertokens-golang is not using a released version of the SDK.");
+    }
+
+    console.log("SuperTokens go version:", version);
 }
 
 function getPythonVersion() {
@@ -71,6 +89,10 @@ function getPythonVersion() {
 
     const supertokensVersionLine = lines.find((line) => line.includes("supertokens-python"));
 
+    if (supertokensVersionLine === undefined) {
+        throw new Error("Error reading version for python");
+    }
+
     console.log("SuperTokens python version line:", supertokensVersionLine);
 }
 
@@ -80,9 +102,27 @@ function getFlutterVersion() {
     const fileContents = readFileSync(packagePath, "utf-8");
     const lines = fileContents.split("\n");
 
-    const supertokensVersionLine = lines.find((line) => line.includes("supertokens_flutter"));
+    let supertokensVersionLine = lines.find((line) => line.includes("supertokens_flutter"));
 
-    console.log("SuperTokens flutter version line:", supertokensVersionLine);
+    if (supertokensVersionLine === undefined) {
+        throw new Error("Error reading version for flutter");
+    }
+
+    supertokensVersionLine = supertokensVersionLine.trim();
+
+    const parts = supertokensVersionLine.split(":");
+
+    if (parts.length !== 2) {
+        throw new Error("Invalid version for supertokens_flutter");
+    }
+
+    const version = parts[1].trim();
+
+    if (version.includes("git")) {
+        throw new Error("supertokens_flutter is not using a released version of the SDK.");
+    }
+
+    console.log("SuperTokens flutter version:", version);
 }
 
 function getIosVersion() {
@@ -92,6 +132,10 @@ function getIosVersion() {
     const lines = fileContents.split("\n");
 
     const supertokensVersionLine = lines.find((line) => line.includes("SuperTokensIOS"));
+
+    if (supertokensVersionLine === undefined) {
+        throw new Error("Error reading version for ios");
+    }
 
     console.log("SuperTokens ios version line:", supertokensVersionLine);
 }
@@ -103,6 +147,10 @@ function getAndroidVersion() {
     const lines = fileContents.split("\n");
 
     const supertokensVersionLine = lines.find((line) => line.includes("com.github.supertokens:supertokens-android"));
+
+    if (supertokensVersionLine === undefined) {
+        throw new Error("Error reading version for android");
+    }
 
     console.log("SuperTokens android version line:", supertokensVersionLine);
 }
