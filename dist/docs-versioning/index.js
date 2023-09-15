@@ -8430,6 +8430,9 @@ async function start() {
                         ref: `tags/${latestTagName}`,
                     })
 
+                    // Adding a delay for tag deletion to take effect
+                    await new Promise((r) => setTimeout(r, 2000));
+
                     await createNewRelease(octokit, latestTagName, releaseNotes);
                 } else {
                     console.log("*********************************************");
