@@ -182,10 +182,8 @@ function getIosVersion() {
         throw new Error("Invalid version for supertokens-ios");
     }
 
-    console.log(parts[1])
-    const version = parts[1].trim().replace("'", "").replace("'", "");
+    const version = parts[1].trim().replace("'", "").replace("'", "").replace('"', "").replace('"', "");
 
-    throw new Error("Test error");
     return getVersionForReleaseNotes(version);
 }
 
@@ -303,6 +301,7 @@ async function start() {
     console.log("Current Versions:");
     console.log(JSON.parse(JSON.stringify(versions), null, 2));
     console.log("------------------");
+    throw new Error("Test error");
 
     const releaseNotes = getReleaseNotesWithVersions(versions);
 
