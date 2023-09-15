@@ -7987,7 +7987,7 @@ __nccwpck_require__.a(__webpack_module__, async (__webpack_handle_async_dependen
 console.log(process.env.INPUT_GITHUB_OWNER)
 const octokit = _actions_github__WEBPACK_IMPORTED_MODULE_0__.getOctokit(process.env.INPUT_GITHUB_TOKEN);
 const tags = await octokit.rest.repos.listTags({
-    owner: "nkshah2",
+    owner: process.env.INPUT_GITHUB_OWNER,
     repo: "docs"
 });
 console.log("TAGSSSS");
