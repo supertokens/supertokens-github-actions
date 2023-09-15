@@ -261,7 +261,7 @@ async function start() {
             pythonVersion,
         };
 
-        console.log(JSON.parse(JSON.stringify(versions)))
+        const releaseNotes = getReleaseNotesWithVersions(versions);
 
         const octokit = Github.getOctokit(process.env.INPUT_GITHUB_TOKEN);
 
@@ -275,8 +275,6 @@ async function start() {
             console.log("* No previous releases found, creating a new one *");
             console.log("**************************************************");
 
-            const releaseNotes = getReleaseNotesWithVersions(versions);
-
             await octokit.rest.repos.createRelease({
                 owner: process.env.INPUT_GITHUB_OWNER,
                 repo: "docs",
@@ -286,6 +284,7 @@ async function start() {
             });
         } else {
             console.log("Previous release found")
+            console.log(releases[0])
         }
     } catch (e) {
         if (e.status === "UNRELEASED_SDK") {
