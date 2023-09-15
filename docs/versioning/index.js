@@ -1,4 +1,4 @@
 import Github from "@actions/github";
 
-console.log(process.env);
-const octokit = new Github.GitHub(process.env.TOKEN_FOR_GITHUB);
+const octokit = Github.getOctokit(process.env.INPUT_GITHUB_TOKEN);
+console.log(await octokit.rest.repos.listTags());
