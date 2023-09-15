@@ -7985,7 +7985,10 @@ __nccwpck_require__.a(__webpack_module__, async (__webpack_handle_async_dependen
 
 
 const octokit = _actions_github__WEBPACK_IMPORTED_MODULE_0__.getOctokit(process.env.INPUT_GITHUB_TOKEN);
-console.log(await octokit.rest.repos.listTags());
+console.log(await octokit.rest.repos.listTags({
+    owner: "nkshah2",
+    repo: "docs"
+}));
 __webpack_async_result__();
 } catch(e) { __webpack_async_result__(e); } }, 1);
 
