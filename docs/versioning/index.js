@@ -10,13 +10,16 @@ console.log("");
 
 async function start() {
     const octokit = Github.getOctokit(process.env.INPUT_GITHUB_TOKEN);
-    const tags = (await octokit.rest.repos.listTags({
-        owner: process.env.INPUT_GITHUB_OWNER,
-        repo: "docs"
-    })).data;
+    // const tags = (await octokit.rest.repos.listTags({
+    //     owner: process.env.INPUT_GITHUB_OWNER,
+    //     repo: "docs"
+    // })).data;
 
-    console.log(process.cwd());
-    console.log(fs.readdirSync(path.resolve(process.cwd(), "../../../")));
+    console.log(path.resolve(process.cwd(), "../../../"));
+    console.log(fs.readdirSync(path.resolve(process.cwd(), "../../../"), {
+        withFileTypes: true,
+        recursive: true,
+    }));
 }
 
 start();

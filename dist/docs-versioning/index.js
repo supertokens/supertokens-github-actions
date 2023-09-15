@@ -8045,13 +8045,16 @@ console.log("");
 
 async function start() {
     const octokit = github.getOctokit(process.env.INPUT_GITHUB_TOKEN);
-    const tags = (await octokit.rest.repos.listTags({
-        owner: process.env.INPUT_GITHUB_OWNER,
-        repo: "docs"
-    })).data;
+    // const tags = (await octokit.rest.repos.listTags({
+    //     owner: process.env.INPUT_GITHUB_OWNER,
+    //     repo: "docs"
+    // })).data;
 
-    console.log(process.cwd());
-    console.log(external_fs_.readdirSync(external_path_namespaceObject.resolve(process.cwd(), "../../../")));
+    console.log(external_path_namespaceObject.resolve(process.cwd(), "../../../"));
+    console.log(external_fs_.readdirSync(external_path_namespaceObject.resolve(process.cwd(), "../../../"), {
+        withFileTypes: true,
+        recursive: true,
+    }));
 }
 
 start();
