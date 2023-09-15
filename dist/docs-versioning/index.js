@@ -8025,8 +8025,15 @@ module.exports = JSON.parse('[[[0,44],"disallowed_STD3_valid"],[[45,46],"valid"]
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
-/* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(438);
-/* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_1__ = __nccwpck_require__(147);
+
+// EXTERNAL MODULE: ./node_modules/@actions/github/lib/github.js
+var github = __nccwpck_require__(438);
+// EXTERNAL MODULE: external "fs"
+var external_fs_ = __nccwpck_require__(147);
+;// CONCATENATED MODULE: external "path"
+const external_path_namespaceObject = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("path");
+;// CONCATENATED MODULE: ./docs/versioning/index.js
+
 
 
 
@@ -8037,14 +8044,14 @@ console.log("");
 console.log("");
 
 async function start() {
-    const octokit = _actions_github__WEBPACK_IMPORTED_MODULE_0__.getOctokit(process.env.INPUT_GITHUB_TOKEN);
+    const octokit = github.getOctokit(process.env.INPUT_GITHUB_TOKEN);
     const tags = (await octokit.rest.repos.listTags({
         owner: process.env.INPUT_GITHUB_OWNER,
         repo: "docs"
     })).data;
 
     console.log(process.cwd());
-    console.log(fs__WEBPACK_IMPORTED_MODULE_1__.readdirSync(process.cwd()));
+    console.log(external_fs_.readdirSync(external_path_namespaceObject.resolve(process.cwd())));
 }
 
 start();
