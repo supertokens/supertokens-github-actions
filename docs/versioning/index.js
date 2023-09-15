@@ -411,10 +411,9 @@ async function start() {
     } catch (e) {
         if (e.status === "UNRELEASED_SDK") {
             console.log("Skipping tagging because of unreleased SDKs")
-            console.log(e.message)
-        } else {
-            throw e;
         }
+
+        throw e;
     }
 }
 
