@@ -8202,7 +8202,7 @@ function getIosVersion() {
         throw new Error("Invalid version for supertokens-ios");
     }
 
-    const version = parts[1].trim();
+    const version = parts[1].trim().replace("'", "").replace("'", "");
 
     return version;
 }
@@ -8238,7 +8238,7 @@ function getAndroidVersion() {
 }
 
 function getReleaseNotesWithVersions(versions) {
-    return ```
+    return `
     This version is compatible with the following supertokens SDKs:
 
     supertokens-node: ${versions.jsVersions.nodeVersion}
@@ -8250,7 +8250,7 @@ function getReleaseNotesWithVersions(versions) {
     supertokens-flutter: ${versions.flutterVersion}
     supertokens-ios: ${versions.iosVersion}
     supertokens-android: ${versions.androidVersion}
-    ```;
+    `;
 }
 
 async function start() {
