@@ -326,9 +326,13 @@ async function start() {
 
             for (let i = 0; i < lines.length; i++) {
                 const line = lines[i];
+                console.log("Line", line)
                 const parts = line.split(":");
                 const sdk = parts[0].trim();
                 const version = parts[1].trim();
+                console.log("SDK", sdk)
+                console.log("Version", version)
+                console.log("--------------")
 
                 sdkToVersionFromOldReleaseNotes[sdk] = version;
             }
