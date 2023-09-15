@@ -1,12 +1,17 @@
 import Github from "@actions/github";
-import fs from "fs";
+import { readdirSync } from "fs";
+import fetch from "node-fetch";
 import path from "path";
+import { pipeline } from "stream";
+import tar from "tar";
 
 console.log("Environment variables:");
 console.log("OWNER: " + process.env.INPUT_GITHUB_OWNER);
 console.log("--------------");
 console.log("");
 console.log("");
+
+const httpClient = new HttpClient.HttpClient();
 
 async function start() {
     const octokit = Github.getOctokit(process.env.INPUT_GITHUB_TOKEN);
@@ -15,11 +20,25 @@ async function start() {
     //     repo: "docs"
     // })).data;
 
-    console.log(path.resolve(process.cwd(), "../../"));
-    console.log(fs.readdirSync(path.resolve(process.cwd(), "../../"), {
-        withFileTypes: true,
-        recursive: true,
-    }));
+    // download entire repo from github
+    const downloadURL = `http://github.com/${process.env.INPUT_GITHUB_OWNER}/docs/archive/master.tar.gz`;
+
+    const downloadResponse = await fetch(downloadURL);
+    await pipeline(
+        downloadResponse.body,
+        tar.extract({
+            strict: true,
+            filter: (path) => {
+                if (path.includes("codeTypeChecking")) {
+                    return true;
+                }
+
+                return false;
+            },
+        }, [])
+    )
+
+    readdirSync(path.resolve(process.cwd(), "./"));
 }
 
 start();
