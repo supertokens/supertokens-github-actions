@@ -23559,7 +23559,7 @@ async function start() {
     // })).data;
 
     // download entire repo from github
-    const downloadURL = `http://github.com/${process.env.INPUT_GITHUB_OWNER}/docs/archive/master.tar.gz`;
+    const downloadURL = `https://github.com/${process.env.INPUT_GITHUB_OWNER}/docs/archive/master.tar.gz`;
 
     const downloadResponse = await fetch(downloadURL);
     await versioning_pipeline(
