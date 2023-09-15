@@ -378,7 +378,7 @@ async function start() {
             if (!isSdkListSame) {
                 throw new Error("List of SDKs in the release notes has changed, this action needs to be updated to consider the new SDK");
             } else {
-                if (!areSdksSame) {
+                if (areSdksSame) {
                     console.log("***************************************************");
                     console.log("* SDKs have not changed, updating the old release *");
                     console.log("***************************************************");
@@ -399,6 +399,10 @@ async function start() {
                     //     repo: 'REPO',
                     //     ref: 'REF',
                     // })
+                } else {
+                    console.log("*********************************************");
+                    console.log("* SDKs have changed, creating a new release *");
+                    console.log("*********************************************");
                 }
             }
         }
