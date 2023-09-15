@@ -8204,7 +8204,7 @@ function getIosVersion() {
 
     const version = parts[1].trim();
 
-    console.log("SuperTokens ios version:", version);
+    return version;
 }
 
 function getAndroidVersion() {
@@ -8237,28 +8237,73 @@ function getAndroidVersion() {
     return version;
 }
 
+function getReleaseNotesWithVersions(versions) {
+    return ```
+    This version is compatible with the following supertokens SDKs:
+
+    supertokens-node: ${versions.jsVersions.nodeVersion}
+    supertokens-golang: ${versions.goVersion}
+    supertokens-python: ${versions.pythonVersion}
+    supertokens-auth-react: ${versions.jsVersions.authReactVersion}
+    supertokens-web-js: ${versions.jsVersions.webJsVersion}
+    supertokens-react-native: ${versions.jsVersions.reactNativeVersion}
+    supertokens-flutter: ${versions.flutterVersion}
+    supertokens-ios: ${versions.iosVersion}
+    supertokens-android: ${versions.androidVersion}
+    ```;
+}
+
 async function start() {
-    // const octokit = Github.getOctokit(process.env.INPUT_GITHUB_TOKEN);
     // const tags = (await octokit.rest.repos.listTags({
     //     owner: process.env.INPUT_GITHUB_OWNER,
     //     repo: "docs"
     // })).data;
 
-    const flutterVersion = getFlutterVersion();
-    const goVersion = getGolangVersion();
-    const iosVersion = getIosVersion();
-    const jsEnv = getJsEnvDependencies();
-    const androidVersion = getAndroidVersion();
-    const pythonVersion = getPythonVersion();
+    try {
+        const flutterVersion = getFlutterVersion();
+        const goVersion = getGolangVersion();
+        const iosVersion = getIosVersion();
+        const jsVersions = getJsEnvDependencies();
+        const androidVersion = getAndroidVersion();
+        const pythonVersion = getPythonVersion();
 
-    console.log(JSON.parse(JSON.stringify({
-        flutterVersion,
-        goVersion,
-        iosVersion,
-        jsEnv,
-        androidVersion,
-        pythonVersion,
-    })))
+        const versions = {
+            flutterVersion,
+            goVersion,
+            iosVersion,
+            jsVersions,
+            androidVersion,
+            pythonVersion,
+        };
+
+        console.log(JSON.parse(JSON.stringify(versions)))
+
+        const octokit = github.getOctokit(process.env.INPUT_GITHUB_TOKEN);
+
+        const releases = (await octokit.rest.repos.listReleases({
+            owner: process.env.INPUT_GITHUB_OWNER,
+            repo: "docs"
+        })).data;
+
+        if (releases.length === 0) {
+            console.log("**************************************************");
+            console.log("* No previous releases found, creating a new one *");
+            console.log("**************************************************");
+
+            const releaseNotes = getReleaseNotesWithVersions(versions);
+
+            console.log(releaseNotes)
+        } else {
+            console.log("Previous release found")
+        }
+    } catch (e) {
+        if (e.status === "UNRELEASED_SDK") {
+            console.log("Skipping tagging because of unreleased SDKs")
+            console.log(e.message)
+        } else {
+            throw e;
+        }
+    }
 }
 
 start();
