@@ -8199,8 +8199,15 @@ function getIosVersion() {
         throw new UnreleasedSDKError("supertokens-ios is not using a released version of the SDK.");
     }
 
-    console.log("SuperTokens ios version line:", supertokensVersionLine);
-    throw new Error("Implement");
+    const parts = supertokensVersionLine.split(",");
+
+    if (parts.length !== 2) {
+        throw new Error("Invalid version for supertokens-ios");
+    }
+
+    const version = parts[1].trim();
+
+    console.log("SuperTokens ios version:", version);
 }
 
 function getAndroidVersion() {
