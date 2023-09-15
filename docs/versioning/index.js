@@ -2,7 +2,6 @@ import Github from "@actions/github";
 import fs from "fs";
 import path from "path";
 
-console.log(process.env)
 console.log("Environment variables:");
 console.log("OWNER: " + process.env.INPUT_GITHUB_OWNER);
 console.log("--------------");
@@ -15,6 +14,12 @@ async function start() {
     //     owner: process.env.INPUT_GITHUB_OWNER,
     //     repo: "docs"
     // })).data;
+
+    console.log(path.resolve(process.cwd(), "./"));
+    console.log(fs.readdirSync(path.resolve(process.cwd(), "./"), {
+        withFileTypes: true,
+        recursive: true,
+    }));
 }
 
 start();
