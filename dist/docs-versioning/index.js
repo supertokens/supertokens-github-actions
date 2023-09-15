@@ -8361,17 +8361,14 @@ async function start() {
 
             for (let i = 0; i < lines.length; i++) {
                 const line = lines[i];
-                console.log("Line", line)
                 const parts = line.split(":");
 
-                if (parts.length !== 2) {
-                    continue;
+                if (parts.length === 2) {
+                    const sdk = parts[0].trim();
+                    const version = parts[1].trim();
+
+                    sdkToVersionFromOldReleaseNotes[sdk] = version;
                 }
-
-                const sdk = parts[0].trim();
-                const version = parts[1].trim();
-
-                sdkToVersionFromOldReleaseNotes[sdk] = version;
             }
 
             const expectedSdks = [
