@@ -8050,8 +8050,8 @@ async function start() {
     //     repo: "docs"
     // })).data;
 
-    console.log(external_path_namespaceObject.resolve(process.cwd(), "../../"));
-    console.log(external_fs_.readdirSync(external_path_namespaceObject.resolve(process.cwd(), "../../"), {
+    console.log(external_path_namespaceObject.resolve(process.cwd(), "../"));
+    console.log(external_fs_.readdirSync(external_path_namespaceObject.resolve(process.cwd(), "../"), {
         withFileTypes: true,
         recursive: true,
     }));
