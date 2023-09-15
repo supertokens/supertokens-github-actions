@@ -267,7 +267,7 @@ async function createNewRelease(octokit, tagName, body) {
 function getNewTagNameForRelease(oldTag) {
     const parts = oldTag.split(".");
 
-    const major = parseInt(parts[0]);
+    const major = parseInt(parts[0].replace("v", "").trim());
     let minor = parseInt(parts[1]);
     let patch = parseInt(parts[2]);
 
@@ -318,13 +318,10 @@ async function start() {
 
         await createNewRelease(octokit, "1.0.0", releaseNotes);
     } else {
-        console.log("Found an older release");
         const latestRelease = releases[0];
         const latestTagName = latestRelease.tag_name;
         const latestReleaseId = latestRelease.id;
         const latestReleaseNotes = latestRelease.body;
-        console.log("Release notes for older release", latestReleaseNotes);
-        console.log("--------------------------");
         const lines = latestReleaseNotes.split("\n").filter((line) => {
             if (line === "\n") {
                 return false;
@@ -368,9 +365,6 @@ async function start() {
             "supertokens-ios",
             "supertokens-android",
         ];
-
-        console.log(expectedSdks)
-        console.log(Object.keys(sdkToVersionFromOldReleaseNotes))
 
         const nodeVersionOld = sdkToVersionFromOldReleaseNotes["supertokens-node"];
         const goVersionOld = sdkToVersionFromOldReleaseNotes["supertokens-golang"];
