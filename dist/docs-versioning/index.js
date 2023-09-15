@@ -8102,7 +8102,6 @@ function getJsEnvDependencies() {
         authReactVersion: getVersionForReleaseNotes(authReactVersion),
         nodeVersion: getVersionForReleaseNotes(nodeVersion),
         webJsVersion: getVersionForReleaseNotes(webJsVersion),
-        websiteVersion: getVersionForReleaseNotes(websiteVersion),
         reactNativeVersion: getVersionForReleaseNotes(reactNativeVersion),
     };
 }
@@ -8360,6 +8359,7 @@ async function start() {
         const latestReleaseId = latestRelease.id;
         const latestReleaseNotes = latestRelease.body;
         console.log("Release notes for older release", latestReleaseNotes);
+        console.log("--------------------------");
         const lines = latestReleaseNotes.split("\n").filter((line) => {
             if (line === "\n") {
                 return false;
