@@ -8402,6 +8402,9 @@ async function start() {
             "supertokens-android",
         ];
 
+        console.log(expectedSdks)
+        console.log(sdkToVersionFromOldReleaseNotes)
+
         const nodeVersionOld = sdkToVersionFromOldReleaseNotes["supertokens-node"];
         const goVersionOld = sdkToVersionFromOldReleaseNotes["supertokens-golang"];
         const pythonVersionOld = sdkToVersionFromOldReleaseNotes["supertokens-python"];
