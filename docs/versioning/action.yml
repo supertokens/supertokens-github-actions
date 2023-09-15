@@ -1,7 +1,9 @@
 name: "Tag Docs Repo"
 description: "Tags the docs repo and creates a release mentioning compatible versions of various SuperTokens SDKs"
-env:
-    GITHUB_TOKEN: ${{ secrets.TOKEN_FOR_GITHUB }}
+inputs:
+  GITHUB_TOKEN:
+    description: "The GitHub token to use for authentication"
+    required: true
 runs:
   using: 'node16'
   main: '../../dist/docs-versioning/index.js'
