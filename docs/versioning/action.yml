@@ -2,4 +2,4 @@ name: "Tag Docs Repo"
 description: "Tags the docs repo and creates a release mentioning compatible versions of various SuperTokens SDKs"
 runs:
   using: 'node16'
-  main: 'dist/docs-versioning/index.js'
+  main: '../../dist/docs-versioning/index.js'
