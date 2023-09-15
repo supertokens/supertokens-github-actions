@@ -8363,11 +8363,13 @@ async function start() {
                 const line = lines[i];
                 console.log("Line", line)
                 const parts = line.split(":");
+
+                if (parts.length !== 2) {
+                    continue;
+                }
+
                 const sdk = parts[0].trim();
                 const version = parts[1].trim();
-                console.log("SDK", sdk)
-                console.log("Version", version)
-                console.log("--------------")
 
                 sdkToVersionFromOldReleaseNotes[sdk] = version;
             }
