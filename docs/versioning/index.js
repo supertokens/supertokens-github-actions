@@ -375,6 +375,9 @@ async function start() {
 
             const isSdkListSame = expectedSdks.every((sdk) => sdkToVersionFromOldReleaseNotes[sdk] !== undefined) && expectedSdks.length === Object.keys(sdkToVersionFromOldReleaseNotes).length;
 
+            console.log("isSdkListSame", isSdkListSame)
+            console.log("areSdksSame", areSdksSame)
+
             if (!isSdkListSame) {
                 throw new Error("List of SDKs in the release notes has changed, this action needs to be updated to consider the new SDK");
             } else {
