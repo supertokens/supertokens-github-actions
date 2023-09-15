@@ -277,7 +277,13 @@ async function start() {
 
             const releaseNotes = getReleaseNotesWithVersions(versions);
 
-            console.log(releaseNotes)
+            await octokit.rest.repos.createRelease({
+                owner: process.env.INPUT_GITHUB_OWNER,
+                repo: "docs",
+                tag_name: "1.0.0",
+                name: "1.0.0",
+                body: releaseNotes,
+            });
         } else {
             console.log("Previous release found")
         }
