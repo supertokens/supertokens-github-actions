@@ -1,5 +1,5 @@
 import Github from "@actions/github";
-import { readFileSync, readdirSync } from "fs";
+import { readFileSync } from "fs";
 import path from "path";
 console.log("Environment variables:");
 console.log("OWNER:", process.env.INPUT_GITHUB_OWNER);
