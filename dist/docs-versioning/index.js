@@ -8033,6 +8033,20 @@ var external_fs_ = __nccwpck_require__(147);
 ;// CONCATENATED MODULE: external "path"
 const external_path_namespaceObject = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("path");
 ;// CONCATENATED MODULE: ./docs/versioning/index.js
+/* Copyright (c) 2022, VRAI Labs and/or its affiliates. All rights reserved.
+*
+* This software is licensed under the Apache License, Version 2.0 (the
+* "License") as published by the Apache Software Foundation.
+*
+* You may not use this file except in compliance with the License. You may
+* obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+* WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+* License for the specific language governing permissions and limitations
+* under the License.
+*/
 
 
 
@@ -8320,6 +8334,10 @@ async function start() {
         pythonVersion,
     };
 
+    console.log("Current Versions:");
+    console.log(JSON.parse(JSON.stringify(versions), null, 2));
+    console.log("------------------");
+
     const releaseNotes = getReleaseNotesWithVersions(versions);
 
     const octokit = github.getOctokit(process.env.INPUT_GITHUB_TOKEN);
@@ -8336,10 +8354,12 @@ async function start() {
 
         await createNewRelease(octokit, "1.0.0", releaseNotes);
     } else {
+        console.log("Found an older release");
         const latestRelease = releases[0];
         const latestTagName = latestRelease.tag_name;
         const latestReleaseId = latestRelease.id;
         const latestReleaseNotes = latestRelease.body;
+        console.log("Release notes for older release", latestReleaseNotes);
         const lines = latestReleaseNotes.split("\n").filter((line) => {
             if (line === "\n") {
                 return false;
