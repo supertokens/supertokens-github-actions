@@ -8051,7 +8051,7 @@ async function start() {
     //     repo: "docs"
     // })).data;
 
-    (0,external_fs_.readdirSync)(external_path_namespaceObject.resolve(process.cwd(), "../../../"));
+    console.log((0,external_fs_.readdirSync)(external_path_namespaceObject.resolve(process.cwd(), "./")))
 }
 
 start();

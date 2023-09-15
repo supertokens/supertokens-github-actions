@@ -16,7 +16,7 @@ async function start() {
     //     repo: "docs"
     // })).data;
 
-    readdirSync(path.resolve(process.cwd(), "../../../"));
+    console.log(readdirSync(path.resolve(process.cwd(), "./")))
 }
 
 start();
