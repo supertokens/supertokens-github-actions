@@ -8161,15 +8161,21 @@ function getFlutterVersion() {
 }
 
 function getIosVersion() {
-    const packagePath = external_path_namespaceObject.resolve(process.cwd(), "./v2/src/plugins/codeTypeChecking/iosenv/Podfile");
+    const packagePath = path.resolve(process.cwd(), "./v2/src/plugins/codeTypeChecking/iosenv/Podfile");
 
-    const fileContents = (0,external_fs_.readFileSync)(packagePath, "utf-8");
+    const fileContents = readFileSync(packagePath, "utf-8");
     const lines = fileContents.split("\n");
 
-    const supertokensVersionLine = lines.find((line) => line.includes("SuperTokensIOS"));
+    let supertokensVersionLine = lines.find((line) => line.includes("SuperTokensIOS"));
 
     if (supertokensVersionLine === undefined) {
         throw new Error("Error reading version for ios");
+    }
+
+    supertokensVersionLine = supertokensVersionLine.trim();
+
+    if (supertokensVersionLine.includes(":git")) {
+        throw new Error("supertokens-ios is not using a released version of the SDK.");
     }
 
     console.log("SuperTokens ios version line:", supertokensVersionLine);
@@ -8181,13 +8187,28 @@ function getAndroidVersion() {
     const fileContents = (0,external_fs_.readFileSync)(packagePath, "utf-8");
     const lines = fileContents.split("\n");
 
-    const supertokensVersionLine = lines.find((line) => line.includes("com.github.supertokens:supertokens-android"));
+    let supertokensVersionLine = lines.find((line) => line.includes("com.github.supertokens:supertokens-android"));
 
     if (supertokensVersionLine === undefined) {
         throw new Error("Error reading version for android");
     }
 
-    console.log("SuperTokens android version line:", supertokensVersionLine);
+    supertokensVersionLine = supertokensVersionLine.trim();
+    const parts = supertokensVersionLine.split(" ");
+    let implementationPathPart = parts[parts.length - 1].trim();
+
+    if (!implementationPathPart.includes("com.github.supertokens:supertokens-android")) {
+        throw new Error("Invalid declaration for supertokens-android");
+    }
+
+    let version = implementationPathPart.replace("'com.github.supertokens:supertokens-android:", "")
+        .replace("'", "")
+
+    if (version.includes("git")) {
+        throw new Error("supertokens-android is not using a released version of the SDK.");
+    }
+
+    console.log("SuperTokens android version line:", version);
 }
 
 async function start() {
@@ -8199,7 +8220,7 @@ async function start() {
 
     getFlutterVersion();
     getGolangVersion();
-    getIosVersion();
+    // getIosVersion();
     // const jsEnv = getJsEnvDependencies();
     getAndroidVersion();
     getPythonVersion();
