@@ -48,11 +48,11 @@ function getJsEnvDependencies() {
     }
 
     return {
-        authReactVersion,
-        nodeVersion,
-        webJsVersion,
-        websiteVersion,
-        reactNativeVersion,
+        authReactVersion: getVersionForReleaseNotes(authReactVersion),
+        nodeVersion: getVersionForReleaseNotes(nodeVersion),
+        webJsVersion: getVersionForReleaseNotes(webJsVersion),
+        websiteVersion: getVersionForReleaseNotes(websiteVersion),
+        reactNativeVersion: getVersionForReleaseNotes(reactNativeVersion),
     };
 }
 
@@ -82,7 +82,7 @@ function getGolangVersion() {
         throw new UnreleasedSDKError("supertokens-golang is not using a released version of the SDK.");
     }
 
-    return version;
+    return getVersionForReleaseNotes(version);
 }
 
 function getPythonVersion() {
@@ -111,7 +111,7 @@ function getPythonVersion() {
 
     const version = parts[1].trim();
 
-    return version;
+    return getVersionForReleaseNotes(version);
 }
 
 function getFlutterVersion() {
@@ -140,7 +140,7 @@ function getFlutterVersion() {
         throw new UnreleasedSDKError("supertokens_flutter is not using a released version of the SDK.");
     }
 
-    return version;
+    return getVersionForReleaseNotes(version);
 }
 
 function getIosVersion() {
@@ -169,7 +169,7 @@ function getIosVersion() {
 
     const version = parts[1].trim().replace("'", "").replace("'", "");
 
-    return version;
+    return getVersionForReleaseNotes(version);
 }
 
 function getAndroidVersion() {
@@ -199,7 +199,7 @@ function getAndroidVersion() {
         throw new UnreleasedSDKError("supertokens-android is not using a released version of the SDK.");
     }
 
-    return version;
+    return getVersionForReleaseNotes(version);
 }
 
 function getReleaseNotesWithVersions(versions) {
@@ -216,6 +216,26 @@ function getReleaseNotesWithVersions(versions) {
     supertokens-ios: ${versions.iosVersion}
     supertokens-android: ${versions.androidVersion}
     `;
+}
+
+function getVersionForReleaseNotes(version) {
+    const returnValue = version
+        .replace("v", "")
+        .replace("^", "")
+        .replace("~>", "")
+        .trim();
+
+    // get major version from version string
+    const parts = returnValue.split(".");
+    
+    let majorVersion = parts[0];
+    let minorVersion = parts[1];
+
+    if (majorVersion !== "0") {
+        return `${majorVersion}.X.X`;
+    } else {
+        return `${majorVersion}.${minorVersion}.X`;
+    }
 }
 
 async function start() {
