@@ -8044,6 +8044,15 @@ console.log("--------------");
 console.log("");
 console.log("");
 
+class UnreleasedSDKError extends Error {
+    status = "UNRELEASED_SDK"
+
+    constructor(message) {
+        super(message);
+        this.name = "UnreleasedSDKError";
+    }
+}
+
 function getJsEnvDependencies() {
     const jsPackageJsonPath = path.resolve(process.cwd(), "./v2/src/plugins/codeTypeChecking/jsEnv/package.json");
     const jsEnvPackageJson = JSON.parse(readFileSync(jsPackageJsonPath, "utf-8"));
@@ -8059,23 +8068,23 @@ function getJsEnvDependencies() {
     const websiteScriptVersion = jsDependencies["supertokens-website-script"];
 
     if (authReactVersion.includes("git")) {
-        throw new Error("supertokens-auth-react is not using a released version of the SDK.");
+        throw new UnreleasedSDKError("supertokens-auth-react is not using a released version of the SDK.");
     }
 
     if (reactNativeVersion.includes("git")) {
-        throw new Error("supertokens-react-native is not using a released version of the SDK.");
+        throw new UnreleasedSDKError("supertokens-react-native is not using a released version of the SDK.");
     }
 
     if (nodeVersion.includes("git") || node7Version.includes("git")) {
-        throw new Error("supertokens-node OR node7 is not using a released version of the SDK.");
+        throw new UnreleasedSDKError("supertokens-node OR node7 is not using a released version of the SDK.");
     }
 
     if (webJsVersion.includes("github") || webjsScriptVersion.includes("github")) {
-        throw new Error("supertokens-web-js OR web-js-script is not using a released version of the SDK.");
+        throw new UnreleasedSDKError("supertokens-web-js OR web-js-script is not using a released version of the SDK.");
     }
 
     if (websiteVersion.includes("git") || websiteScriptVersion.includes("git")) {
-        throw new Error("supertokens-website OR website-script is not using a released version of the SDK.");
+        throw new UnreleasedSDKError("supertokens-website OR website-script is not using a released version of the SDK.");
     }
 
     return {
@@ -8110,7 +8119,7 @@ function getGolangVersion() {
     const version = parts[1].trim();
 
     if (version.includes("git")) {
-        throw new Error("supertokens-golang is not using a released version of the SDK.");
+        throw new UnreleasedSDKError("supertokens-golang is not using a released version of the SDK.");
     }
 
     console.log("SuperTokens go version:", version);
@@ -8154,7 +8163,7 @@ function getFlutterVersion() {
     const version = parts[1].trim();
 
     if (version.includes("git")) {
-        throw new Error("supertokens_flutter is not using a released version of the SDK.");
+        throw new UnreleasedSDKError("supertokens_flutter is not using a released version of the SDK.");
     }
 
     console.log("SuperTokens flutter version:", version);
@@ -8175,7 +8184,7 @@ function getIosVersion() {
     supertokensVersionLine = supertokensVersionLine.trim();
 
     if (supertokensVersionLine.includes(":git")) {
-        throw new Error("supertokens-ios is not using a released version of the SDK.");
+        throw new UnreleasedSDKError("supertokens-ios is not using a released version of the SDK.");
     }
 
     console.log("SuperTokens ios version line:", supertokensVersionLine);
@@ -8205,7 +8214,7 @@ function getAndroidVersion() {
         .replace("'", "")
 
     if (version.includes("git")) {
-        throw new Error("supertokens-android is not using a released version of the SDK.");
+        throw new UnreleasedSDKError("supertokens-android is not using a released version of the SDK.");
     }
 
     console.log("SuperTokens android version line:", version);
