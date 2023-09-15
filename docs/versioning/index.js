@@ -15,7 +15,7 @@ async function start() {
     })).data;
 
     console.log(process.cwd());
-    console.log(fs.readdirSync("~/"));
+    console.log(fs.readdirSync("../../"));
 }
 
 start();
