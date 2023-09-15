@@ -383,22 +383,23 @@ async function start() {
                     console.log("* SDKs have not changed, updating the old release *");
                     console.log("***************************************************");
 
-                    // await octokit.rest.repos.deleteRelease({
-                    //     owner: process.env.INPUT_GITHUB_OWNER,
-                    //     repo: "docs",
-                    //     release_id: latestReleaseId,
-                    // });
-
-                    console.log((await octokit.rest.repos.listTags({
+                    await octokit.rest.repos.deleteRelease({
                         owner: process.env.INPUT_GITHUB_OWNER,
                         repo: "docs",
-                    })).data)
+                        release_id: latestReleaseId,
+                    });
 
-                    // await octokit.request(`DELETE /repos/${process.env.INPUT_GITHUB_OWNER}/docs/git/refs/{ref}`, {
-                    //     owner: 'OWNER',
-                    //     repo: 'REPO',
-                    //     ref: 'REF',
-                    // })
+                    // const tags = await octokit.rest.repos.listTags({
+                    //     owner: process.env.INPUT_GITHUB_OWNER,
+                    //     repo: "docs",
+                    // }).data;
+
+
+                    await octokit.request(`DELETE /repos/${process.env.INPUT_GITHUB_OWNER}/docs/git/refs/tags/${latestTagName}`, {
+                        owner: process.env.INPUT_GITHUB_OWNER,
+                        repo: 'docs',
+                        ref: `tags/${latestTagName}`,
+                    })
                 } else {
                     console.log("*********************************************");
                     console.log("* SDKs have changed, creating a new release *");
