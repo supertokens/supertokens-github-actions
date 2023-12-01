@@ -35,7 +35,7 @@ const releaseNotesFirstLine = "This version is compatible with the following sup
 function getJsEnvDependencies() {
     const jsPackageJsonPath = path.resolve(process.cwd(), "./v2/src/plugins/codeTypeChecking/jsEnv/package.json");
     const jsEnvPackageJson = JSON.parse(readFileSync(jsPackageJsonPath, "utf-8"));
-    
+
     const jsDependencies = jsEnvPackageJson.dependencies;
     const authReactVersion = jsDependencies["supertokens-auth-react"];
     const nodeVersion = jsDependencies["supertokens-node"];
@@ -242,7 +242,7 @@ function getVersionForReleaseNotes(version) {
 
     // get major version from version string
     const parts = returnValue.split(".");
-    
+
     let majorVersion = parts[0];
     let minorVersion = parts[1];
 
@@ -265,6 +265,8 @@ async function createNewRelease(octokit, tagName, body) {
 }
 
 function getNewTagNameForRelease(oldTag) {
+    console.log("-----OLD TAG-----")
+    console.log(oldTag)
     const parts = oldTag.split(".");
 
     const major = parseInt(parts[0].replace("v", "").trim());
@@ -277,6 +279,9 @@ function getNewTagNameForRelease(oldTag) {
     } else {
         patch++;
     }
+
+    console.log("-----NEW TAG-----")
+    console.log(`${major}.${minor}.${patch}`)
 
     return `${major}.${minor}.${patch}`;
 }
