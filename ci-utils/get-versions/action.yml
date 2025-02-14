@@ -1,0 +1,59 @@
+name: Get core/driver versions from CDI/FDI version
+description: Get core/driver versions from CDI/FDI version
+
+runs:
+  using: node20
+  main: index.js
+
+inputs:
+  driver-name:
+    description: The driver being used for the code
+    required: true
+
+
+  cdi-version:
+    description: CDI Version to use
+    required: false
+    default: ''
+
+  core-plan-type:
+    description: The plan for the supertokens core
+    required: false
+    default: FREE
+
+  core-mode:
+    description: The mode for the supertokens core
+    required: false
+    default: DEV
+
+
+  fdi-version:
+    description: FDI Version to use
+    required: false
+    default: ''
+
+  frontend-mode:
+    description: The mode for the frontend
+    required: false
+    default: DEV
+
+outputs:
+  core-version:
+    description: Supertokens-core version corresponding to CDI version
+
+  frontend-version-xy:
+    description: ''
+  frontend-tag:
+    description: ''
+  frontend-version:
+    description: ''
+  node-version-xy:
+    description: ''
+  node-tag:
+    description: ''
+  auth-react-version-xy:
+    description: ''
+  auth-react-tag:
+    description: ''
+  auth-react-version:
+    description: ''

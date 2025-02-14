@@ -1,0 +1,24 @@
+name: Get CDI/FDI versions from files
+description: Get CDI/FDI versions from files
+
+runs:
+  using: node20
+  main: index.js
+
+inputs:
+  has-cdi:
+    description: Whether the repository contains a coreDriverInterface file
+    required: true
+    default: true
+
+  has-fdi:
+    description: Whether the repository contains a frontendDriverInterface file
+    required: true
+    default: true
+
+outputs:
+  cdi-versions:
+    description: List of CDI versions
+  
+  fdi-versions:
+    description: List of FDI versions
